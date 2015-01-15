@@ -2,7 +2,7 @@ import random
 
 def a_crossover(parent1, parent2):
 	a = random.random()
-	print "parameter a", a
+#	print "parameter a", a
 	num_variables = len(parent1)
 	child1 = [ 0.0 for _ in range(num_variables)] 
 	child2 = [ 0.0 for _ in range(num_variables)]
@@ -11,6 +11,7 @@ def a_crossover(parent1, parent2):
 		child2[i] = (1-a) * parent1[i] + a * parent2[i]
 
 	return child1, child2
+
 def s_crossover(parent1, parent2, k):
 #chech if we get feasible child
 	num_variables = len(parent1)
@@ -34,18 +35,16 @@ def h_crossover(parent1, parent2):
 
 	return child
 
-#inicijalizacija populacije
+#initial population
 pop_size = 10
-#	num_variables = 2
+			#num_variables = 2
 individual = [1.1, 1.1]
 population = [[0.0,0.0]] * pop_size
 for i in range(pop_size):
 	population[i] = individual
 
 population[0] = [0.0, 0.0]
-print "Pocetna populacija", population
-
-#aritmeticko krizanje
+print "Initial population", population
 
 a_offsprings = a_crossover(population[0], population[1])
 #print "arithmetical offsprings", a_offsprings
