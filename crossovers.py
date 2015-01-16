@@ -37,7 +37,7 @@ def h_crossover(parent1, parent2):
 
 
 if __name__ == "__main__":
-	#initial population
+#initial population
 	pop_size = 10
 			#num_variables = 2
 	individual = [1.1, 1.1]
