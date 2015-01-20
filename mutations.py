@@ -122,7 +122,8 @@ if __name__ == "__main__":
 # find or enter feasible individual
 	print "Enter feasible individual"
 	tmp = raw_input()
-	Population = initialize_population(tmp)
+	pop_size = 20
+	Population = initialize_population(tmp, pop_size)
 	print "Initial population", Population
 
 	# possibility of mutation

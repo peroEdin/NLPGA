@@ -1,18 +1,20 @@
-import random
+from random import random
+from input import input, initialize_population
+from sys import argv
 
 def a_crossover(parent1, parent2):
-	a = random.random()
+	a = random()
 #	print "parameter a", a
 	num_variables = len(parent1)
-	child1 = [ 0.0 for _ in xrange(num_variables)] 
+	child1 = [ 0.0 for _ in xrange(num_variables)]
 	child2 = [ 0.0 for _ in xrange(num_variables)]
 	for i in xrange(num_variables):
-		child1[i] = a * parent1[i] + (1-a) * parent2[i]
+		child1[1] = a * parent1[i] + (1-a) * parent2[i]
 		child2[i] = (1-a) * parent1[i] + a * parent2[i]
 
 	return child1, child2
 
-def s_crossover(parent1, parent2, k):
+def s_crossover(parent1, parent2, k, eq, ieq, d_restrictions):
 #chech if we get feasible child
 	num_variables = len(parent1)
 	child1 = [ 0.0 for _ in xrange(num_variables)] 
@@ -25,10 +27,10 @@ def s_crossover(parent1, parent2, k):
 			break
 	return child1, child2
 
-def h_crossover(parent1, parent2):
+def h_crossover(parent1, parent2, eq, ieq, d_restrictions):
 #chech if we get feasible child
 	num_variables = len(parent1)
-	r = random.random()
+	r = random()
 	child = [ 0.0 for _ in xrange(num_variables)]
  	for i in xrange(num_variables):
 		child[i] = r * (parent2[i] - parent1[i]) + parent2[i]
@@ -38,21 +40,22 @@ def h_crossover(parent1, parent2):
 
 if __name__ == "__main__":
 #initial population
-	pop_size = 10
-			#num_variables = 2
-	individual = [1.1, 1.1]
-	population = [[0.0,0.0]] * pop_size
-	for i in xrange(pop_size):
-		population[i] = individual
 
-	population[0] = [0.0, 0.0]
-	print "Initial population", population
+	data = []
+	data = input(argv[1])
+	num_variables = data[6]
+	eq = data[1]
+	ieq = data[3]
+	d_restrictions = data[5]
+	pop_size = 20
+	population = initialize_population(argv[2] + ' ' + argv[3], pop_size)
 
 	a_offsprings = a_crossover(population[0], population[1])
 	print "arithmetical offsprings", a_offsprings
 
-	h_offsprings = h_crossover(population[0], population[1])
+	s_offsprings = s_crossover(population[0], population[1], 1, eq, ieq, d_restrictions)
+	print "simple offsprings", s_offsprings
+
+	h_offsprings = h_crossover(population[0], population[1], eq, ieq, d_restrictions)
 	print "heuristics offsprings", h_offsprings
 
-	s_offsprings = s_crossover(population[0], population[1], 1)
-	print "s_offsprings", s_offsprings

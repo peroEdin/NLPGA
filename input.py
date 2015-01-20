@@ -44,11 +44,12 @@ def input(file_name):
 	return num_eq, eq, num_ieq, ieq, num_d_restrictions, d_restrictions, num_variables
 
 
-def initialize_population(individual_string):
+def initialize_population(individual_string, pop_size):
 	
+	#pop_size = 20
 	individual = map(float, individual_string.split())
 	Population = []
-	Population = [ individual for _ in xrange(20) ]
+	Population = [ individual for _ in xrange(pop_size) ]
 	#print "Initial population", Population
 	return Population
 
