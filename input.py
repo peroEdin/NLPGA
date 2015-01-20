@@ -1,4 +1,4 @@
-import sys
+from sys import argv
 
 
 def input(file_name):
@@ -41,11 +41,23 @@ def input(file_name):
 	#print "D_REST", d_restrictions
 
 	input.close()
-	return num_eq, eq, num_ieq, ieq, num_d_restrictions, d_restrictions
+	return num_eq, eq, num_ieq, ieq, num_d_restrictions, d_restrictions, num_variables
 
 
+def initialize_population(individual_string):
+	
+	individual = map(float, individual_string.split())
+	Population = []
+	Population = [ individual for _ in xrange(20) ]
+	#print "Initial population", Population
+	return Population
+
+	
 if __name__ == "__main__":
 	
 	data = []
-	data = input(sys.argv[1])
+	data = input(argv[1])
 	print data
+	
+	population = initialize_population(argv[2] + ' ' + argv[3])
+	print population
