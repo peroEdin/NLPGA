@@ -1,11 +1,12 @@
 import sys
 
+
 def input(file_name):
 	input = open(file_name, 'r')
 
 	#how many constraints all together
 	line = input.readline()
-
+	
 	line = line.split(' ')
 	num_variables = int(line[0])
 	num_eq = int(line[1])
@@ -21,29 +22,30 @@ def input(file_name):
 	input.readline()
 	for _ in xrange(num_eq):
 		line = input.readline()
-		line = line.split(' ')
-		line = [int(x) for x in line]
-		eq += [line]
-	#print eq
+		new = map(float, line.split())
+		eq.append(new)
+	#print "EQ", eq
 
 	input.readline()
 	for _ in xrange(num_ieq):
 		line = input.readline()
-		line = line.split(' ')
-		line = [int(x) for x in line]
-		ieq += [line]
-	#print ieq
+		new = map(float, line.split())
+		ieq.append(new)
+	#print "IEQ", ieq
 
 	input.readline()
 	for _ in xrange(num_d_restrictions):
 		line = input.readline()
-		line = line.split(' ')
-		line = [int(x) for x in line]
-		d_restrictions += [line]
-	#print d_restrictions
+		new = map(float, line.split())
+		d_restrictions.append(new)
+	#print "D_REST", d_restrictions
 
 	input.close()
-	#return data !!
+	return num_eq, eq, num_ieq, ieq, num_d_restrictions, d_restrictions
+
 
 if __name__ == "__main__":
-	input(sys.argv[1])
+	
+	data = []
+	data = input(sys.argv[1])
+	print data

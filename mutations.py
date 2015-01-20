@@ -1,129 +1,84 @@
 from random import random, uniform, randint 
 from math import pow
+from sys import argv
+from input import input
 
 
-
-var = int(raw_input("Broj varijabli: "))
-jed = int(raw_input("Broj jednadzbi: "))
-nej = int(raw_input("Broj nejednadzbi:"))
-dom = int(raw_input("Broj uvjeta na domenu: "))
-
-print "Unos nejednakosti"
-
-Nejednakosti = []
-
-uneseno = 0
-while  (uneseno < nej):
-
-	r = raw_input()
-	redak = map(float, r.split())
-
-	Nejednakosti.append(redak)
-	uneseno += 1
+def left ( point, index, Domain_rest, Eq_rest, Ieq_rest ):
 	
-print "Unos uvjeta na domenu"
+	l = Domain_rest[index][0]
+	restrictions = []
+	var = len(point)
 
-DomUvj = []
-
-uneseno = 0
-while  (uneseno < dom):
-
-	r = raw_input()
-	redak = map(float, r.split())
-
-	DomUvj.append(redak)
-	uneseno += 1
-
-
-print "Unos dopustive tocke"
-# nadji dopustivu tocku ili je sam unesi
-
-Populacija = []
-
-t = raw_input()
-tocka = map(float, t.split())
-
-Populacija = [ tocka for _ in xrange(20) ]
-print "Pocetna populacija", Populacija
-
-p_mutation = 0.5
-#vjerojatnost svake mutacije zasebno ili ovako
-
-
-def left ( tocka, indeks ):
-	
-	l = DomUvj[indeks][0]
-	uvj = []
-
-	for redak in Nejednakosti:
+	for row in Ieq_rest:
 		suma = 0
-		if (redak[indeks] < 0.0):
+		if (row[index] < 0.0):
 			for i in xrange(0,var):
-				suma += redak[i]*tocka[i]
+				suma += row[i]* point[i]
 
-			uvj.append((redak[var] - (suma - redak[indeks]*tocka[indeks])) / redak[indeks] ) 
+			restrictions.append(( row[var] - (suma - row[index]*point[index])) / row[index] ) 
 	
-	if uvj == []:	
+	if restrictions == []:	
 		return l
 	else:
-		return max( max(uvj), l)
+		return max( max(restrictions), l)
 		
 
-def right ( tocka, indeks ):
-	
-	r = DomUvj[indeks][1]
-	uvj = []
+def right (  point, index, Domain_rest, Eq_rest, Ieq_rest ):
 
-	for redak in Nejednakosti:
+	r = Domain_rest[index][1]
+	restrictions = []
+	var = len(point)
+
+	for row in Ieq_rest:
 		suma = 0
-		if (redak[indeks] > 0.0):
+		if (row[index] > 0.0):
 			for i in xrange(0,var):
-				suma += redak[i]*tocka[i]
+				suma += row[i]* point[i]
 
-			uvj.append((redak[var] - (suma - redak[indeks]*tocka[indeks])) / redak[indeks] ) 
-
-	if uvj == []:		
+			restrictions.append(( row[var] - (suma - row[index]*point[index])) / row[index] ) 
+	
+	if restrictions == []:	
 		return r
-	else:		
-		return min( min(uvj), r)
+	else:
+		return min( min(restrictions), r)
 		
 	
-def domena ( tocka, indeks ):
+def domain ( point, index, Domain_rest, Eq_rest, Ieq_rest ):
 	
 	dom = []
-	dom.append( left(tocka, indeks) )
-	dom.append( right(tocka, indeks))
+	dom.append( left(point, index, Domain_rest, Eq_rest, Ieq_rest ))
+	dom.append( right(point, index, Domain_rest, Eq_rest, Ieq_rest ))
 	return dom
 
 
+def uniform_mutation( parent, parent_dom, index ):
 
-def uniform_mutation( parent ):
+	#index = randint(0, len(parent)-1)
 
-	index = randint(0, len(parent)-1)
-
-	dom = domena( parent, index)
+	#parent_dom = domena( parent, index)
 
 	child = parent[:]
-	child[index] = uniform( dom[0], dom[1] ) 
+	child[index] = uniform( parent_dom[0], parent_dom[1] ) 
 
-#	print "mutirano dijete", child
-#	print "index", index, "domena", dom
+	#print "mutirano dijete", child
+	#print "index", index, "domena", parent_dom
 	return child
 
-def boundary_mutation ( parent ):
+def boundary_mutation ( parent, parent_dom, index ):
 
-	index = randint(0, len(parent)-1)
+	#index = randint(0, len(parent)-1)
 
-	dom = domena( parent, index)
+	#dom = domena( parent, index)
 	child = parent[:]
 
 	if( randint(0,1) == 0 ):
-		child[index] = dom[0]
+		child[index] = parent_dom[0]
 	else:	
-		child[index] = dom[1]
+		child[index] = parent_dom[1]
 
-	print "mutirano dijete", child
-	print "index", index, "domena", dom
+	#print "mutirano dijete", child
+	#print "index", index, "domena", parent_dom
 
 	return child
 
@@ -150,34 +105,37 @@ def nonunif_mutation( parent ):
 
 """
 
-Mutirani = []
-for jedinka in Populacija:
-	if(random() < p_mutation):
-		# izaberi random mutaciju		
-		print "Izabrana jedinka za mutaciju...", jedinka
-		#print "\t\t", Populacija	
 
-		
-		Mutirani.append( boundary_mutation( jedinka ) )
-		
-print "Lista mutiranih", Mutirani
+if __name__ == "__main__":
 
+	data = []
+	data = input(argv[1])
 
+	eq = data[1]
+	ieq = data[3]
+	d_restrictions = data[5]
 
+	#print eq, ieq, d_restrictions
+	# find or enter feasible individual
+	print "Enter feasible individual"
+	tmp = raw_input()
+	individual = map(float, tmp.split())
+	#print domain(individual, 1, data[1], data[3], data[5])
+	Population = []
+	Population = [ individual for _ in xrange(20) ]
+	print "Initial population", Population
 
+	# possibility of mutation
+	p_mutation = 0.5
 
-
-
-
-
-
-
-
-
-
-
-
-	
-
-	
-	
+	Mutated = []
+	for individual in Population:
+		if(random() < p_mutation):
+			   # izaberi random mutaciju		
+			   print "Individual for mutation ", individual
+			   #print "\t\t", Populacija	
+			   index = randint(0, len(individual)-1)
+			   Ind_domain = domain( individual, index, d_restrictions, eq, ieq)
+			   Mutated.append( uniform_mutation( individual, Ind_domain, index ) )    
+	   		
+	print "Mutated list", Mutated	
