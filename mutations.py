@@ -1,7 +1,7 @@
 from random import random, uniform, randint 
 from math import pow
 from sys import argv
-from input import input
+from input import input, initialize_population
 
 
 def left ( point, index, Domain_rest, Eq_rest, Ieq_rest ):
@@ -108,6 +108,8 @@ def nonunif_mutation( parent ):
 
 if __name__ == "__main__":
 
+# restrictions from file
+
 	data = []
 	data = input(argv[1])
 
@@ -116,13 +118,11 @@ if __name__ == "__main__":
 	d_restrictions = data[5]
 
 	#print eq, ieq, d_restrictions
-	# find or enter feasible individual
+
+# find or enter feasible individual
 	print "Enter feasible individual"
 	tmp = raw_input()
-	individual = map(float, tmp.split())
-	#print domain(individual, 1, data[1], data[3], data[5])
-	Population = []
-	Population = [ individual for _ in xrange(20) ]
+	Population = initialize_population(tmp)
 	print "Initial population", Population
 
 	# possibility of mutation
